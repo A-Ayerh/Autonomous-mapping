@@ -4,6 +4,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
+import java_gui.beziercurvedrawing.BezierCurveDrawer;
+
 public class BezierCurveApplication {
 
     public static void main(String[] args) {

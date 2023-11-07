@@ -1,4 +1,6 @@
+package java_gui.beziercurvedrawing;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
