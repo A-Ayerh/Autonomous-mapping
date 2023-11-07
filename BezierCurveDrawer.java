@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,9 @@ public class BezierCurveDrawer extends JPanel {
 
     private List<Drawout> drawouts = new ArrayList<>();
     private Drawout currentDrawout;
+
+    // Member variable to keep track of the selected control point
+    private Point selectedPoint;
 
     public BezierCurveDrawer() {
          // Setup the save button
@@ -61,7 +65,37 @@ public class BezierCurveDrawer extends JPanel {
                 }
                 repaint(); // Repaint the panel to show the new point and update the curves
             }
+            @Override
+        public void mousePressed(MouseEvent e) {
+            for (List<Point> curve : listOfControlPointLists) {
+                for (Point controlPoint : curve) {
+                    if (isNearby(e.getPoint(), controlPoint)) {
+                        selectedPoint = controlPoint; // Select the point for dragging
+                        repaint();
+                        return;
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            selectedPoint = null; // Deselect the control point
+            repaint();
+        }
         });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (selectedPoint != null) {
+                    selectedPoint.setLocation(e.getPoint());
+                    repaint(); // Repaint to show the updated curve
+                }
+            }
+        });
+
+        
         currentDrawout = new Drawout("Drawout " + (drawouts.size() + 1));
 
         // Initialize the drawout selector
@@ -78,8 +112,11 @@ public class BezierCurveDrawer extends JPanel {
         topPanel.add(btnNewDrawout);
         this.add(topPanel, BorderLayout.NORTH);
     }
-
-    
+// Method to check if a click is near a control point
+private boolean isNearby(Point click, Point controlPoint) {
+    final int THRESHOLD = 10; // Pixel threshold for selecting a control point
+    return click.distance(controlPoint) < THRESHOLD;
+}
 
     @Override
 protected void paintComponent(Graphics g) {
