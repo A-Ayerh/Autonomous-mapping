@@ -4,24 +4,47 @@ import java.awt.geom.Path2D;
 import java.util.List;
 
 public class BezierCurve {
-    // Constructor and fields
     private List<Point> controlPoints;
-    private Color curveColor;
+    private Color color;
 
-    public BezierCurve(List<Point> controlPoints, Color curveColor) {
+    public BezierCurve(List<Point> controlPoints, Color color) {
         this.controlPoints = controlPoints;
-        this.curveColor = curveColor;
+        this.color = color;
     }
 
-    // Method to calculate and return the Path2D for the Bezier curve
-    public Path2D getPath() {
-        // TODO: Implement Bezier curve calculation
-        return new Path2D.Double();
+    public Path2D calculatePath() {
+        Path2D path = new Path2D.Double();
+        if (controlPoints.size() == 4) {
+            Point p0 = controlPoints.get(0);
+            Point p1 = controlPoints.get(1);
+            Point p2 = controlPoints.get(2);
+            Point p3 = controlPoints.get(3);
+
+            path.moveTo(p0.x, p0.y);
+            for (double t = 0; t <= 1; t += 0.01) {
+                double x = Math.pow(1 - t, 3) * p0.x +
+                           3 * Math.pow(1 - t, 2) * t * p1.x +
+                           3 * (1 - t) * t * t * p2.x +
+                           t * t * t * p3.x;
+                double y = Math.pow(1 - t, 3) * p0.y +
+                           3 * Math.pow(1 - t, 2) * t * p1.y +
+                           3 * (1 - t) * t * t * p2.y +
+                           t * t * t * p3.y;
+                path.lineTo(x, y);
+            }
+        }
+        return path;
     }
 
-    // Method to draw the Bezier curve
-    public void drawCurve(Graphics2D g2d) {
-        // TODO: Implement drawing logic using getPath()
+    public void draw(Graphics2D g2d) {
+        Path2D path = calculatePath();
+        g2d.setColor(color);
+        g2d.draw(path);
+
+        // Draw control points
+        for (Point point : controlPoints) {
+            g2d.setColor(Color.BLACK);
+            g2d.fillOval(point.x - 3, point.y - 3, 6, 6);
+        }
     }
 }
-
