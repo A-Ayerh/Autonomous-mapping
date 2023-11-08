@@ -9,14 +9,29 @@ public class BezierCurveDrawer {
     private PathManagementWindow pathManagementWindow;
 
     public BezierCurveDrawer() {
-        // TODO: Initialize managers and UI
+        drawoutManager = new DrawoutManager();
+        controlPointManager = new ControlPointManager();
+        drawingPanel = new DrawingPanel(controlPointManager, drawoutManager);
+        uiManager = new UIManager(drawingPanel);
+        pathManagementWindow = new PathManagementWindow(drawoutManager);
+
+        // Link the managers to UI components if necessary
+        // Example: uiManager.setDrawoutManager(drawoutManager);
+        // Example: drawingPanel.setPathManagementWindow(pathManagementWindow);
+
+        // Register listeners or callbacks between components
+        // Example: drawoutManager.addDrawoutChangeListener(drawingPanel::repaint);
     }
 
-    // Methods to coordinate the actions between different components
-    // ...
+    public void launch() {
+        // This method would create the main application window and make it visible.
+        // It would probably also set up the initial state, such as loading any existing paths.
+        // Example: uiManager.initialize();
+        // Example: uiManager.showWindow();
+    }
 
     public static void main(String[] args) {
-        // TODO: Launch the application
+        BezierCurveDrawer bezierCurveDrawer = new BezierCurveDrawer();
+        bezierCurveDrawer.launch();
     }
 }
-
