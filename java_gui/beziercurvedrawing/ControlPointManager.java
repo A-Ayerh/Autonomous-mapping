@@ -5,23 +5,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ControlPointManager {
-    private List<Point> controlPoints;
-    private Point selectedPoint;
+    private List<Point> controlPoints = new ArrayList<>();
+    private Point selectedPoint = null;
+
+    // Threshold for how close a click must be to a control point to select it
+    private static final int SELECTION_THRESHOLD = 10;
 
     public ControlPointManager() {
-        controlPoints = new ArrayList<>();
-        // TODO: Initialize fields
     }
 
-    // Method to select a control point
+    public void addControlPoint(Point point) {
+        controlPoints.add(point);
+    }
+
+    public List<Point> getControlPoints() {
+        return controlPoints;
+    }
+
+    public boolean isNearby(Point click, Point controlPoint) {
+        return click.distance(controlPoint) < SELECTION_THRESHOLD;
+    }
+
     public void selectControlPoint(Point point) {
-        // TODO: Implement selection logic
+        for (Point controlPoint : controlPoints) {
+            if (isNearby(point, controlPoint)) {
+                selectedPoint = controlPoint;
+                break;
+            }
+        }
     }
 
-    // Method to move a selected control point
-    public void moveControlPoint(Point point) {
-        // TODO: Implement move logic
+    public void moveSelectedPoint(Point point) {
+        if (selectedPoint != null) {
+            selectedPoint.setLocation(point);
+        }
     }
 
-    // Other control point methods...
+    public void releaseSelectedPoint() {
+        selectedPoint = null;
+    }
+
+    public Point getSelectedPoint() {
+        return selectedPoint;
+    }
+
+    // Draws the control points on the panel
+    public void draw(Graphics2D g2d) {
+        for (Point point : controlPoints) {
+            g2d.setColor(Color.BLACK);
+            g2d.fillOval(point.x - 3, point.y - 3, 6, 6);
+        }
+    }
 }
