@@ -9,20 +9,37 @@ public class DrawoutManager {
 
     public DrawoutManager() {
         drawouts = new ArrayList<>();
-        // TODO: Initialize the currentDrawout
+        // Initialize with a default drawout
+        currentDrawout = new Drawout("Default Drawout");
+        drawouts.add(currentDrawout);
     }
 
-    // Method to add a new Drawout
     public void addDrawout(Drawout drawout) {
-        // TODO: Implement adding logic
+        drawouts.add(drawout);
+        currentDrawout = drawout; // Optionally set the newly added drawout as current
     }
 
-    // Method to select a Drawout
-    public void selectDrawout(int index) {
-        // TODO: Implement selection logic
+    public void removeDrawout(Drawout drawout) {
+        drawouts.remove(drawout);
+        // Handle the situation where the current drawout is removed
+        if (drawout.equals(currentDrawout) && !drawouts.isEmpty()) {
+            currentDrawout = drawouts.get(0); // Select another drawout as current
+        } else if (drawouts.isEmpty()) {
+            currentDrawout = null; // No current drawout available
+        }
     }
 
-    // Other management methods...
+    public Drawout getCurrentDrawout() {
+        return currentDrawout;
+    }
+
+    public void setCurrentDrawout(Drawout drawout) {
+        if (drawouts.contains(drawout)) {
+            currentDrawout = drawout;
+        }
+    }
+
+    public List<Drawout> getDrawouts() {
+        return drawouts;
+    }
 }
-
-
